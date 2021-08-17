@@ -3,7 +3,7 @@ FROM ubuntu:${UBUNTU_VER} as packages
 
 # build arguments
 ARG DEBIAN_FRONTEND=noninteractive
-ARG CHIVES_VERSION
+ARG RELEASE
 
 # environment variables
 ENV \
@@ -27,7 +27,9 @@ RUN \
 	--no-install-recommends \
 		bc \
 		ca-certificates \
+		curl \
 		git \
+		jq \
 		lsb-release \
 		sudo \
 # cleanup
@@ -38,8 +40,11 @@ RUN \
 
 # build package
 RUN \
-	set -ex \
-	&& git clone -b dev https://github.com/HiveProject2021/chives-blockchain.git \
+	if [ -z ${RELEASE+x} ]; then \
+	RELEASE=$(curl -u "${SECRETUSER}:${SECRETPASS}" -sX GET "https://api.github.com/repos/HiveProject2021/chives-blockchain/releases/latest" \
+	| jq -r ".tag_name"); \
+	fi \
+	&& git clone -b ${RELEASE} https://github.com/HiveProject2021/chives-blockchain.git \
 		/chives-blockchain \		
 	&& sh install.sh \
 # cleanup
