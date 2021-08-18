@@ -38,13 +38,16 @@ RUN \
 		/var/lib/apt/lists/* \
 		/var/tmp/*
 
+# set shell
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # build package
 RUN \
 	if [ -z ${RELEASE+x} ]; then \
 	RELEASE=$(curl -u "${SECRETUSER}:${SECRETPASS}" -sX GET "https://api.github.com/repos/HiveProject2021/chives-blockchain/releases/latest" \
 	| jq -r ".tag_name"); \
 	fi \
-	&& git clone -b ${RELEASE} https://github.com/HiveProject2021/chives-blockchain.git \
+	&& git clone -b "${RELEASE}" https://github.com/HiveProject2021/chives-blockchain.git \
 		/chives-blockchain \		
 	&& sh install.sh \
 # cleanup
@@ -54,5 +57,5 @@ RUN \
 		/var/tmp/*
 
 # add local files
-ADD ./entrypoint.sh entrypoint.sh
+COPY ./entrypoint.sh entrypoint.sh
 ENTRYPOINT ["bash", "./entrypoint.sh"]
