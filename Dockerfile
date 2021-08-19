@@ -47,7 +47,7 @@ RUN \
 	RELEASE=$(curl -u "${SECRETUSER}:${SECRETPASS}" -sX GET "https://api.github.com/repos/HiveProject2021/chives-blockchain/releases/latest" \
 	| jq -r ".tag_name"); \
 	fi \
-	&& git clone -b "${RELEASE}" https://github.com/HiveProject2021/chives-blockchain.git \
+	&& git clone -b "${RELEASE}" --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git \
 		/chives-blockchain \		
 	&& sh install.sh \
 # cleanup
