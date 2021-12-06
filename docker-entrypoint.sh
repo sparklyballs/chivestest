@@ -11,8 +11,7 @@ cd /chives-blockchain || exit 1
 # shellcheck disable=SC1091
 . ./activate
 
-chives init
-# chives init --fix-ssl-permissions
+chives init --fix-ssl-permissions
 
 if [[ ${testnet} == 'true' ]]; then
    echo "configure testnet"
