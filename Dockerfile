@@ -24,12 +24,7 @@ RUN \
 	RELEASE=$(curl -u "${SECRETUSER}:${SECRETPASS}" -sX GET "https://api.github.com/repos/HiveProject2021/chives-blockchain/releases/latest" \
 	| jq -r ".tag_name"); \
 	fi \
-# temp fix for broken symlink 
-	&& git clone https://github.com/HiveProject2021/chives-blockchain.git . \
-	&& git checkout -b ${RELEASE} \
-	&& curl -O https://raw.githubusercontent.com/HiveProject2021/chives-blockchain/main/.gitmodules \
-	&& git submodule update --init \
-#	&& git clone --branch ${RELEASE} --recurse-submodules=mozilla-ca https://github.com/HiveProject2021/chives-blockchain.git . \
+	&& git clone --branch ${RELEASE} --recurse-submodules=mozilla-ca https://github.com/HiveProject2021/chives-blockchain.git . \
 	&& /bin/sh ./install.sh
 
 FROM python:3.9-slim
